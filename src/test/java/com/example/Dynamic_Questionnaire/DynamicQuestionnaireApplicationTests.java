@@ -1,9 +1,12 @@
 package com.example.Dynamic_Questionnaire;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -35,9 +38,85 @@ class DynamicQuestionnaireApplicationTests {
 	}
 
 	@Test
-	public void deleteQnameTest() {
+	void getQuestionnaireFeedback() {
 		QuestionnaireReq req = new QuestionnaireReq();
-		req.setQuestionnaireNameUuid("d2216015-4d4f-49ef-bea1-3ef92017e1c9");
+		req.setWriteDateUuid("a6d99525-6acb-42a2-acf9-d9aa63fab5fc");
+		QuestionnaireRes res = questionnaireNameService.getQuestionnaireFeedback(req);
+		List<TopicTitle> topicTitleInfo = res.getTopicTitleInfo();
+		List<Options> optionsInfo = res.getOptionsInfoList();
+		List<String> chooseOptionsForPeople = res.getChooseListForPeople();
+		Map<String, Boolean> map = new HashMap<>();
+		System.out.println(res.getQuestionnaireName().getQuestionnaireName() + " 問卷名稱");
+		System.out.println(res.getPeople().getName() + " 用戶名子");
+		System.out.println(res.getWriteDate().getWriteDateTime() + " 填寫時間");
+		for (var tL : topicTitleInfo) {
+			System.out.println(tL.getTopicName() + " =>題目");
+			for (var oL : optionsInfo) {
+				if (tL.getTopicUuid().equals(oL.getTopicUuid())) {
+					String options = oL.getQuestionName() + " 選項";
+//					System.out.println(options);
+					for (var cL : chooseOptionsForPeople) {
+						if (oL.getQuestionName().equals(cL) && tL.getTopicUuid().equals(oL.getTopicUuid())) {
+//							System.out.println(cL + " 用戶勾勾的選項");
+							String op = options+"勾勾";
+//							options += "勾勾";
+							System.out.println(op);
+						}
+					}
+					System.out.println(options);
+					options = "";
+				}
+			}
+		}
+
+//		for (var tL : topicTitleInfo) {
+//			System.out.println(tL.getTopicName() + " =>題目");
+//			for (var cL : chooseOptionsForPeople) {
+//				System.out.println(cL + " 用戶勾勾");
+//				for (var oL : optionsInfo) {
+//					if (tL.getTopicUuid().equals(oL.getTopicUuid())) {
+//						System.out.println(oL.getQuestionName() + " 選項");
+//					}
+//				}
+//			}
+//		}
+
+	}
+
+	@Test
+	void creatWriteDateAndCount() {
+		QuestionnaireReq req = new QuestionnaireReq();
+		req.setQuestionnaireNameUuid("173b6085-7196-4c59-b23f-b4630ceeafaa");
+		req.setPeopleId("24c5effe-616a-4064-bda6-1fbf62a17b35");
+		List<String> optionsList = new ArrayList<>();
+		optionsList.add("e6d88bf7-3783-473a-a6df-b706a0e6f132"); 
+//		optionsList.add("5ae36e4e-dc7e-41d6-bd07-5bff4949f708");
+
+		req.setOptionsUuidList(optionsList);
+		QuestionnaireRes res = questionnaireNameService.creatWriteDateAndCount(req);
+		System.out.println(res.getWriteDate().getName());
+	}
+
+	@Test
+	public void creatPeople() {
+		QuestionnaireReq req = new QuestionnaireReq();
+		req.setName("蘇盟凱");
+		req.setManOrGirl("男");
+		req.setEmail("a0973038822@gmail.com");
+		req.setPhone("0973038822");
+		req.setAge(23);
+		QuestionnaireRes res = questionnaireNameService.creatPeople(req);
+		System.out.println(res.getMessage());
+	}
+
+	@Test
+	public void deleteQnameTest() {
+		List<String> dList= new ArrayList<>();
+		dList.add("問卷uuid");
+		QuestionnaireReq req = new QuestionnaireReq();
+		req.setQuestionnaireNameUuidList(dList);
+
+		
 		QuestionnaireRes res = questionnaireNameService.deleteQuestionnaireName(req);
 		System.out.println(res.getMessage());
 	}
@@ -92,6 +171,8 @@ class DynamicQuestionnaireApplicationTests {
 		reqVo2.setQuestionName("1.紅茶;2.豆漿;3.奶茶");
 		reqVo3.setTopicTitleName("第一份問卷的第三個題目=拉什麼");
 		reqVo3.setQuestionName("1.大便");
+		LocalDate s = LocalDate.now();
+		req.setStartDate(s);
 		List<DynamicQuestionnaireVo> reqVoList = new ArrayList<>();
 		reqVoList.add(reqVo);
 		reqVoList.add(reqVo2);
@@ -111,9 +192,9 @@ class DynamicQuestionnaireApplicationTests {
 		String uuidStr = "d0cc74d7-f08a-4f38-98e5-d05fa3c2c7b0";
 		QuestionnaireReq req = new QuestionnaireReq();
 		req.setQuestionnaireNameUuid(uuidStr);
-		QuestionnaireRes res = questionnaireNameService.getTopicAndQuestion(req);
+		QuestionnaireRes res = questionnaireNameService.getTopicAndOptions(req);
 		List<TopicTitle> TL = res.getTopicTitleInfo();
-		List<Options> QL = res.getQuestionInfo();
+		List<Options> QL = res.getOptionsInfoList();
 		System.out.println(res.getQuestionnaireName().getQuestionnaireName());
 		for (var T : TL) {
 			System.out.println(T.getTopicName());

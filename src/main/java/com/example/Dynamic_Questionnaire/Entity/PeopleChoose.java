@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "choose_count")
-public class ChooseCount {
+@Table(name = "people_choose")
+public class PeopleChoose {
 	@Id
 	@Column(name = "count_uuid")
 	@Type(type = "uuid-char")
@@ -29,29 +29,30 @@ public class ChooseCount {
 	@Type(type = "uuid-char")
 	private UUID optionsUuid;
 
-	@Column(name = "man")
-	private int man;
+	@Column(name = "people_id")
+	@Type(type = "uuid-char")
+	private UUID peopleId;
+	
+	@Column(name = "question_name")
+	private String questionName;
 
-	@Column(name = "girl")
-	private int girl;
-
-	@Column(name = "total_people")
-	private int totalPeople;
-
-	public ChooseCount() {
+	public PeopleChoose() {
 	}
 
-	public ChooseCount(UUID countUuid, UUID questionnaireUuid, UUID topicUuid, UUID optionsUuid) {
+	public PeopleChoose(UUID countUuid, UUID questionnaireUuid, UUID topicUuid, UUID optionsUuid, UUID peopleId,String questionName) {
 		this.countUuid = countUuid;
 		this.questionnaireUuid = questionnaireUuid;
 		this.topicUuid = topicUuid;
 		this.optionsUuid = optionsUuid;
+		this.peopleId = peopleId;
+		this.questionName=questionName;
 
 	}
-	public ChooseCount(UUID countUuid, UUID questionnaireUuid,  UUID optionsUuid) {
+
+	public PeopleChoose(UUID countUuid, UUID questionnaireUuid, UUID optionsUuid) {
 		this.countUuid = countUuid;
 		this.questionnaireUuid = questionnaireUuid;
-	
+
 		this.optionsUuid = optionsUuid;
 
 	}
@@ -88,28 +89,21 @@ public class ChooseCount {
 		this.optionsUuid = optionsUuid;
 	}
 
-	public int getMan() {
-		return man;
+	public UUID getPeopleId() {
+		return peopleId;
 	}
 
-	public void setMan(int man) {
-		this.man = man;
+	public void setPeopleId(UUID peopleId) {
+		this.peopleId = peopleId;
 	}
 
-	public int getGirl() {
-		return girl;
+	public String getQuestionName() {
+		return questionName;
 	}
 
-	public void setGirl(int girl) {
-		this.girl = girl;
+	public void setQuestionName(String questionName) {
+		this.questionName = questionName;
 	}
-
-	public int getTotalPeople() {
-		return totalPeople;
-	}
-
-	public void setTotalPeople(int totalPeople) {
-		this.totalPeople = totalPeople;
-	}
+	
 
 }

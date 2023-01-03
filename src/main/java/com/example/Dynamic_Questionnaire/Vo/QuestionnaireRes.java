@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.Dynamic_Questionnaire.Entity.Options;
+import com.example.Dynamic_Questionnaire.Entity.People;
+import com.example.Dynamic_Questionnaire.Entity.PeopleChoose;
 import com.example.Dynamic_Questionnaire.Entity.QuestionnaireName;
 import com.example.Dynamic_Questionnaire.Entity.TopicTitle;
+import com.example.Dynamic_Questionnaire.Entity.WriteDate;
 
 public class QuestionnaireRes {
 	private QuestionnaireName questionnaireName; // 問卷標題
@@ -14,35 +17,62 @@ public class QuestionnaireRes {
 	private String message; // 訊息
 	private List<QuestionnaireName> questionnaireNameList;// 提供搜尋用
 	private List<TopicTitle> topicTitleInfo;// 提供搜尋用
-	private List<Options> questionInfo;// 提供搜尋用
-	private List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList;
+	private List<Options> optionsInfoList;// 提供搜尋用
+	private List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList;// Vo封裝
+	private WriteDate writeDate;// 填寫日期
+	private People people;// 用戶資訊
+	private PeopleChoose peopleChoose;// 用戶選擇
+	private List<WriteDate> writeListInfo;// 填寫日期資訊
+	private List<String> chooseListForPeople;
 
 	public QuestionnaireRes() {
 
 	}
 
-	public QuestionnaireRes(List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList,String message) {
+	public QuestionnaireRes(People people, WriteDate writeDate, QuestionnaireName questionnaireName,
+			List<TopicTitle> topicTitleInfo, List<Options> optionsInfo, List<String> chooseListForPeople) {
+		this.people = people;
+		this.writeDate = writeDate;
+		this.questionnaireName = questionnaireName;
+		this.topicTitleInfo = topicTitleInfo;
+		this.optionsInfoList = optionsInfo;
+		this.chooseListForPeople = chooseListForPeople;
+	}
+
+	public QuestionnaireRes(WriteDate writeDate, String message) {
+		this.writeDate = writeDate;
+		this.message = message;
+
+	}
+
+	public QuestionnaireRes(People people, String message) {
+		this.people = people;
+		this.message = message;
+
+	}
+
+	public QuestionnaireRes(List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList, String message) {
 		this.dynamicQuestionnaireVoList = dynamicQuestionnaireVoList;
-		this.message=message;
+		this.message = message;
 	}
 
 	public QuestionnaireRes(QuestionnaireName questionnaireName, List<TopicTitle> topicTitleInfo,
 			List<Options> questionInfo) {
 		this.questionnaireName = questionnaireName;
 		this.topicTitleInfo = topicTitleInfo;
-		this.questionInfo = questionInfo;
+		this.optionsInfoList = questionInfo;
 	}
 
 	public QuestionnaireRes(List<TopicTitle> topicTitleInfo, List<Options> questionInfo) {
 		this.topicTitleInfo = topicTitleInfo;
-		this.questionInfo = questionInfo;
+		this.optionsInfoList = questionInfo;
 	}
 
 	public QuestionnaireRes(List<QuestionnaireName> questionnaireNameList, List<TopicTitle> topicTitleInfo,
 			List<Options> questionInfo) {
 		this.questionnaireNameList = questionnaireNameList;
 		this.topicTitleInfo = topicTitleInfo;
-		this.questionInfo = questionInfo;
+		this.optionsInfoList = questionInfo;
 	}
 
 	public QuestionnaireRes(List<QuestionnaireName> questionnaireNameList) {
@@ -125,12 +155,12 @@ public class QuestionnaireRes {
 		this.topicTitleInfo = topicTitleInfo;
 	}
 
-	public List<Options> getQuestionInfo() {
-		return questionInfo;
+	public List<Options> getOptionsInfoList() {
+		return optionsInfoList;
 	}
 
-	public void setQuestionInfo(List<Options> questionInfo) {
-		this.questionInfo = questionInfo;
+	public void setOptionsInfoList(List<Options> questionInfo) {
+		this.optionsInfoList = questionInfo;
 	}
 	// ---
 
@@ -141,6 +171,45 @@ public class QuestionnaireRes {
 	public void setDynamicQuestionnaireVoList(List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList) {
 		this.dynamicQuestionnaireVoList = dynamicQuestionnaireVoList;
 	}
-	
+
+	public WriteDate getWriteDate() {
+		return writeDate;
+	}
+
+	public void setWriteDate(WriteDate writeDate) {
+		this.writeDate = writeDate;
+	}
+
+	public People getPeople() {
+		return people;
+	}
+
+	public void setPeople(People people) {
+		this.people = people;
+	}
+
+	public PeopleChoose getPeopleChoose() {
+		return peopleChoose;
+	}
+
+	public void setPeopleChoose(PeopleChoose peopleChoose) {
+		this.peopleChoose = peopleChoose;
+	}
+
+	public List<WriteDate> getWriteListInfo() {
+		return writeListInfo;
+	}
+
+	public void setWriteListInfo(List<WriteDate> writeListInfo) {
+		this.writeListInfo = writeListInfo;
+	}
+
+	public List<String> getChooseListForPeople() {
+		return chooseListForPeople;
+	}
+
+	public void setChooseListForPeople(List<String> chooseListForPeople) {
+		this.chooseListForPeople = chooseListForPeople;
+	}
 
 }

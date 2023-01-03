@@ -2,7 +2,7 @@ package com.example.Dynamic_Questionnaire.Vo;
 
 import java.util.UUID;
 
-import com.example.Dynamic_Questionnaire.Entity.ChooseCount;
+import com.example.Dynamic_Questionnaire.Entity.PeopleChoose;
 import com.example.Dynamic_Questionnaire.Entity.Options;
 import com.example.Dynamic_Questionnaire.Entity.QuestionnaireName;
 import com.example.Dynamic_Questionnaire.Entity.TopicTitle;

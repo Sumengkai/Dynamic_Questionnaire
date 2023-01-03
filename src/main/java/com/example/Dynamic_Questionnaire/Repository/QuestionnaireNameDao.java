@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.Dynamic_Questionnaire.Entity.QuestionnaireName;
+
 @Transactional
 @Repository
 public interface QuestionnaireNameDao extends JpaRepository<QuestionnaireName, UUID> {
@@ -29,6 +30,6 @@ public interface QuestionnaireNameDao extends JpaRepository<QuestionnaireName, U
 	List<QuestionnaireName> findByStartDateBetweenOrderByStartDateDesc(LocalDate startDate, LocalDate endDate);
 
 	// §R°£°Ý¨÷
-//	public void deleteByQuestionnaireUuid(UUID questionnaireUuid);
+	public void deleteByQuestionnaireUuidIn(List<UUID> questionnaireUuid);
 
 }
