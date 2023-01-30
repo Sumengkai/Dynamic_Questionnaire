@@ -1,6 +1,7 @@
 package com.example.Dynamic_Questionnaire.Entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -27,18 +28,21 @@ public class QuestionnaireName {
 	private boolean stateOpenOrClosure;
 	@Column(name = "description")
 	private String description;
+	@Column(name = "creat_time")
+	private LocalDateTime creatTime;
 
 	public QuestionnaireName() {
 	}
 
 	public QuestionnaireName(UUID questionnaireUuid, String questionnaireName, LocalDate startDate, LocalDate endDate,
-			boolean stateOpenOrClosure, String description) {
+			boolean stateOpenOrClosure, String description, LocalDateTime creatTime) {
 		this.questionnaireUuid = questionnaireUuid;
 		this.questionnaireName = questionnaireName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.stateOpenOrClosure = stateOpenOrClosure;
 		this.description = description;
+		this.creatTime = creatTime;
 	}
 
 	public QuestionnaireName(UUID questionnaireUuid, String questionnaireName, LocalDate startDate, LocalDate endDate,
@@ -97,4 +101,13 @@ public class QuestionnaireName {
 	public void setQuestionnaireUuid(UUID questionnaireUuid) {
 		this.questionnaireUuid = questionnaireUuid;
 	}
+
+	public LocalDateTime getCreatTime() {
+		return creatTime;
+	}
+
+	public void setCreatTime(LocalDateTime creatTime) {
+		this.creatTime = creatTime;
+	}
+
 }

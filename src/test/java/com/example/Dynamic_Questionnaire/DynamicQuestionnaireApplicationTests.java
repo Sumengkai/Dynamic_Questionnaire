@@ -39,31 +39,34 @@ class DynamicQuestionnaireApplicationTests {
 
 	@Test
 	void getQuestionnaireFeedback() {
-		QuestionnaireReq req = new QuestionnaireReq();
-		req.setWriteDateUuid("a6d99525-6acb-42a2-acf9-d9aa63fab5fc");
+		QuestionnaireReq req = new QuestionnaireReq();//req要丟參數進去
+		//請求post上面
+		req.setWriteDateUuid("7a02592c-263e-466f-801c-9542db9935eb");
+		
 		QuestionnaireRes res = questionnaireNameService.getQuestionnaireFeedback(req);
-		List<TopicTitle> topicTitleInfo = res.getTopicTitleInfo();
+		
+		List<TopicTitle> topicTitleInfo = res.getTopicTitleInfoList();
 		List<Options> optionsInfo = res.getOptionsInfoList();
 		List<String> chooseOptionsForPeople = res.getChooseListForPeople();
-		Map<String, Boolean> map = new HashMap<>();
+		
 		System.out.println(res.getQuestionnaireName().getQuestionnaireName() + " 問卷名稱");
 		System.out.println(res.getPeople().getName() + " 用戶名子");
 		System.out.println(res.getWriteDate().getWriteDateTime() + " 填寫時間");
+		
 		for (var tL : topicTitleInfo) {
-			System.out.println(tL.getTopicName() + " =>題目");
+			System.out.println( " ----------------------------------");
+			System.out.println(tL.getTopicName() + " =>題目");		
 			for (var oL : optionsInfo) {
 				if (tL.getTopicUuid().equals(oL.getTopicUuid())) {
 					String options = oL.getQuestionName() + " 選項";
-//					System.out.println(options);
+					System.out.printf(options);
 					for (var cL : chooseOptionsForPeople) {
 						if (oL.getQuestionName().equals(cL) && tL.getTopicUuid().equals(oL.getTopicUuid())) {
-//							System.out.println(cL + " 用戶勾勾的選項");
-							String op = options+"勾勾";
-//							options += "勾勾";
+							String op = "勾勾";
 							System.out.println(op);
 						}
 					}
-					System.out.println(options);
+					System.out.println("");
 					options = "";
 				}
 			}
@@ -86,10 +89,15 @@ class DynamicQuestionnaireApplicationTests {
 	@Test
 	void creatWriteDateAndCount() {
 		QuestionnaireReq req = new QuestionnaireReq();
-		req.setQuestionnaireNameUuid("173b6085-7196-4c59-b23f-b4630ceeafaa");
-		req.setPeopleId("24c5effe-616a-4064-bda6-1fbf62a17b35");
+		req.setQuestionnaireNameUuid("f9ad642c-80ad-42f4-b74f-c119e66725a3");
+		req.setPeopleId("1e7d7bbe-ca30-4cd3-9b16-a71995913ff4");//人
 		List<String> optionsList = new ArrayList<>();
-		optionsList.add("e6d88bf7-3783-473a-a6df-b706a0e6f132"); 
+		optionsList.add("19de6a0c-c023-4912-8660-c61b786b6d29"); 
+		optionsList.add("31f21d53-1975-4120-8241-8e11d3496859"); 
+		optionsList.add("9b319a74-e4c4-47f8-b3c8-e9f13c3ae476"); 
+		optionsList.add("a4b4c5c5-0d00-41e5-9909-f392bde7cd0d"); 
+		optionsList.add("f061bf81-88a7-4100-8720-2afd5bd448c4"); 
+		optionsList.add("46c840b4-b996-4bc5-a083-79d3d830964b"); 
 //		optionsList.add("5ae36e4e-dc7e-41d6-bd07-5bff4949f708");
 
 		req.setOptionsUuidList(optionsList);
@@ -100,7 +108,7 @@ class DynamicQuestionnaireApplicationTests {
 	@Test
 	public void creatPeople() {
 		QuestionnaireReq req = new QuestionnaireReq();
-		req.setName("蘇盟凱");
+		req.setName("蘇盟傑");
 		req.setManOrGirl("男");
 		req.setEmail("a0973038822@gmail.com");
 		req.setPhone("0973038822");
@@ -189,15 +197,15 @@ class DynamicQuestionnaireApplicationTests {
 
 	@Test
 	public void sTest() { // 暫時留著
-		String uuidStr = "d0cc74d7-f08a-4f38-98e5-d05fa3c2c7b0";
+		String uuidStr = "f9ad642c-80ad-42f4-b74f-c119e66725a3";
 		QuestionnaireReq req = new QuestionnaireReq();
 		req.setQuestionnaireNameUuid(uuidStr);
 		QuestionnaireRes res = questionnaireNameService.getTopicAndOptions(req);
-		List<TopicTitle> TL = res.getTopicTitleInfo();
+		List<TopicTitle> TL = res.getTopicTitleInfoList();
 		List<Options> QL = res.getOptionsInfoList();
 		System.out.println(res.getQuestionnaireName().getQuestionnaireName());
 		for (var T : TL) {
-			System.out.println(T.getTopicName());
+			System.out.println(T.getTopicName()+"---------------------");
 			for (var Q : QL) {
 				if (T.getTopicUuid().equals(Q.getTopicUuid())) {
 					System.out.println(Q.getQuestionName());

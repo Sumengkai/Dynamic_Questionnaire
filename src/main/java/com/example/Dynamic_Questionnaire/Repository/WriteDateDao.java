@@ -18,6 +18,7 @@ public interface WriteDateDao extends JpaRepository<WriteDate, UUID> {
 	public void deleteByQuestionnaireUuid(UUID questionnaireUuid);
 
 	public List<WriteDate> findByQuestionnaireUuid(UUID questionnaireUuid);
+	public List<WriteDate> findByQuestionnaireUuidOrderByWriteDateTimeDesc(UUID questionnaireUuid);
 
 	public List<WriteDate> findByOrderByWriteDateTimeDesc();
 

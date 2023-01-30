@@ -1,6 +1,7 @@
 package com.example.Dynamic_Questionnaire.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ public class QuestionnaireController {
 
 //---------------------------------------------------------------
 	/* 新增問卷--------------------------------------------------- */
-	@PostMapping(value = "creatQuestionnaireName")
+	@PostMapping(value = "/api/creatQuestionnaireName")
 	public QuestionnaireRes creatQuestionnaireName(@RequestBody QuestionnaireReq req) {
 		return questionnaireNameService.creatQuestionnaireName(req);
 	}
@@ -59,16 +60,16 @@ public class QuestionnaireController {
 		return questionnaireNameService.creatPeople(req);
 	}
 
-	/* 自動更新開啟或關閉------------------------------------------ps.應該可不用寫進前端 */
-//	@PostMapping(value = "autoUpdateOpenOrClosure")
-//	public void autoUpdateOpenOrClosure() {
-//		return questionnaireNameService.autoUpdateOpenOrClosure();
-//	}
+	/* 統計------------------------------------------------------- */
+	@PostMapping(value = "getTopicAndOptions")
+	public QuestionnaireRes getTopicAndOptions(@RequestBody QuestionnaireReq req) {
+		return questionnaireNameService.getTopicAndOptions(req);
+	}
 
-	/* 打印出用戶填問卷日期------------------------------------------ */
+	/* 打印出用戶填問卷日期----------------------------------------- */
 	@PostMapping(value = "getPeopleAndWriteDateInfo")
-	public QuestionnaireRes getPeopleAndWriteDateInfo() {
-		return questionnaireNameService.getPeopleAndWriteDateInfo();
+	public QuestionnaireRes getPeopleAndWriteDateInfo(@RequestBody QuestionnaireReq req) {
+		return questionnaireNameService.getPeopleAndWriteDateInfo(req);
 	}
 
 	/* 問卷回饋---------------------------------------------------- */
@@ -76,4 +77,6 @@ public class QuestionnaireController {
 	public QuestionnaireRes getQuestionnaireFeedback(@RequestBody QuestionnaireReq req) {
 		return questionnaireNameService.getQuestionnaireFeedback(req);
 	}
+	
+	
 }

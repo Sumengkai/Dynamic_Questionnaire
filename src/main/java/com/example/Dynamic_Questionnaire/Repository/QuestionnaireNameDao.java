@@ -19,15 +19,43 @@ public interface QuestionnaireNameDao extends JpaRepository<QuestionnaireName, U
 	// 都沒有參數時用
 	List<QuestionnaireName> findAllByOrderByStartDateDesc();
 
+	// 都沒有參數時用
+	List<QuestionnaireName> findAllByOrderByCreatTimeDesc();
+
 	// 只有搜尋問卷名稱用
-	List<QuestionnaireName> findByQuestionnaireNameLikeOrderByStartDateDesc(String qsuestionnaireName);
+	List<QuestionnaireName> findByQuestionnaireNameContainingOrderByStartDateDesc(String qsuestionnaireName);
+
+	// 只有搜尋問卷名稱用
+	List<QuestionnaireName> findByQuestionnaireNameContainingOrderByCreatTimeDesc(String qsuestionnaireName);
 
 	// 搜尋問卷名、開始日期、結束日期區間
-	List<QuestionnaireName> findByQuestionnaireNameLikeAndStartDateBetweenOrderByStartDateDesc(
+	List<QuestionnaireName> findByQuestionnaireNameContainingAndStartDateBetweenOrderByStartDateDesc(
 			String qsuestionnaireName, LocalDate startDate, LocalDate endDate);
+
+	// 搜尋問卷名、開始日期、結束日期區間
+	List<QuestionnaireName> findByQuestionnaireNameContainingAndStartDateGreaterThanEqualAndEndDateLessThanEqualOrderByCreatTimeDesc(
+			String qsuestionnaireName, LocalDate startDate, LocalDate endDate);
+
+	// 有問卷名稱、有開始日期、沒有結束日期
+	List<QuestionnaireName> findByQuestionnaireNameContainingAndStartDateGreaterThanEqualOrderByCreatTimeDesc(
+			String qsuestionnaireName, LocalDate startDate);
+
+	// 搜尋問卷名、開始日期、結束日期區間
+	List<QuestionnaireName> findByQuestionnaireNameContainingAndEndDateLessThanEqualOrderByCreatTimeDesc(
+			String qsuestionnaireName, LocalDate endDate);
 
 	// 藉由時間找到所有問卷
 	List<QuestionnaireName> findByStartDateBetweenOrderByStartDateDesc(LocalDate startDate, LocalDate endDate);
+
+	// 藉由時間找到所有問卷
+	List<QuestionnaireName> findByStartDateGreaterThanEqualAndEndDateLessThanEqualOrderByCreatTimeDesc(
+			LocalDate startDate, LocalDate endDate);
+
+	// 藉由時間找到所有問卷
+	List<QuestionnaireName> findByEndDateLessThanEqualOrderByCreatTimeDesc(LocalDate endDate);
+
+	// 藉由時間找到所有問卷
+	List<QuestionnaireName> findByStartDateGreaterThanEqualOrderByCreatTimeDesc(LocalDate endDate);
 
 	// 刪除問卷
 	public void deleteByQuestionnaireUuidIn(List<UUID> questionnaireUuid);

@@ -139,13 +139,13 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			// 有描述
 			if (StringUtils.hasText(req.getDescription())) {
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, true, req.getDescription());
+						endDate, true, req.getDescription(), LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 
 			} else {
 				// 沒有描述
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, true, "無");
+						endDate, true, "無", LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 			}
 		}
@@ -161,12 +161,12 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			// 有描述
 			if (StringUtils.hasText(req.getDescription())) {
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, checkOpenOrClorse, req.getDescription());
+						endDate, checkOpenOrClorse, req.getDescription(), LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 
 			} else {
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, checkOpenOrClorse, "無");
+						endDate, checkOpenOrClorse, "無", LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 			}
 		}
@@ -182,13 +182,13 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			// 有描述
 			if (StringUtils.hasText(req.getDescription())) {
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, checkOpenOrClorse, req.getDescription());
+						endDate, checkOpenOrClorse, req.getDescription(), LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 
 			} else {
 				// 沒有描述
 				questionnaireName = new QuestionnaireName(UUID.randomUUID(), req.getQuestionnaireName(), startDate,
-						endDate, checkOpenOrClorse, "無");
+						endDate, checkOpenOrClorse, "無", LocalDateTime.now());
 				questionnaireNameDao.save(questionnaireName);
 			}
 		}
@@ -212,7 +212,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 		// 迴圈封裝的vo ps.開箱
 		for (var voItem : dynamicQuestionnaireVoList) {
 			if (!StringUtils.hasText(voItem.getQuestionName()) || !StringUtils.hasText(voItem.getTopicTitleName())) {
-				return new QuestionnaireRes("請輸入至少一個選項或問題");
+				return new QuestionnaireRes("問卷新增成功，但題目新增失敗，如需修改請前往編輯模式");
 			}
 			boolean checkEssential = voItem.isEssential();// 單選為false
 			boolean checkOnlyOrMany = voItem.isOnlyOrMany();// 唯一為false
@@ -427,7 +427,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 	public QuestionnaireRes getQuestionnaireList(QuestionnaireReq req) {
 
 		// 自動更新狀態 ps.開啟或關閉
-		autoUpdateOpenOrClosure();
+//		autoUpdateOpenOrClosure();
 
 		// 有輸入問卷名稱true
 		boolean checkSearchQname = StringUtils.hasText(req.getSearchQuestionnaireName());
@@ -444,8 +444,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 		// 1.三個都沒輸入
 		if (!checkSearchQname && !checkSearchStartDate && !checkSearchEndDate) {
 			// 回傳全部資料
-			questionnaireNameInfo = questionnaireNameDao.findAllByOrderByStartDateDesc();
-
+			questionnaireNameInfo = questionnaireNameDao.findAllByOrderByCreatTimeDesc();
 		}
 
 		// 2.三者都有輸入
@@ -461,52 +460,41 @@ public class QuestionnaireImpl implements QuestionnaireService {
 
 			// 回傳模糊搜尋、時間區間後的資料
 			questionnaireNameInfo = questionnaireNameDao
-					.findByQuestionnaireNameLikeAndStartDateBetweenOrderByStartDateDesc(req.getQuestionnaireName(),
-							startDate, endDate);
+					.findByQuestionnaireNameContainingAndStartDateGreaterThanEqualAndEndDateLessThanEqualOrderByCreatTimeDesc(
+							req.getSearchQuestionnaireName(), startDate, endDate);
+
 		}
+		
 		// 3.有問卷名稱、有開始日期、沒有結束日期
 		if (checkSearchQname && checkSearchStartDate && !checkSearchEndDate) {
 			LocalDate startDate = req.getSearchStartDate();
-			if (LocalDate.now().isBefore(startDate)) {
-				return new QuestionnaireRes("開始日期不可大於今天");
-			}
-
 			// 回傳模糊搜尋、時間區間後的資料
 			questionnaireNameInfo = questionnaireNameDao
-					.findByQuestionnaireNameLikeAndStartDateBetweenOrderByStartDateDesc(req.getQuestionnaireName(),
-							startDate, LocalDate.now());
+					.findByQuestionnaireNameContainingAndStartDateGreaterThanEqualOrderByCreatTimeDesc(
+							req.getSearchQuestionnaireName(), startDate);
 		}
+		
 		// 4.只有問卷名稱
 		if (checkSearchQname && !checkSearchStartDate && !checkSearchEndDate) {
 			// 回傳模糊搜尋的資料
 			questionnaireNameInfo = questionnaireNameDao
-					.findByQuestionnaireNameLikeOrderByStartDateDesc(req.getQuestionnaireName());
+					.findByQuestionnaireNameContainingOrderByCreatTimeDesc(req.getSearchQuestionnaireName());
 		}
+		
 		// 5.有問卷名稱、有結束日期、沒有開始日期
 		if (checkSearchQname && checkSearchEndDate && !checkSearchStartDate) {
-
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-			LocalDate startDate = LocalDate.parse("0001-01-01", format);
-
-			LocalDate endDate = req.getSearchStartDate();
-
+			LocalDate endDate = req.getSearchEndDate();
 			// 回傳模糊搜尋、時間區間後的資料
 			questionnaireNameInfo = questionnaireNameDao
-					.findByQuestionnaireNameLikeAndStartDateBetweenOrderByStartDateDesc(req.getQuestionnaireName(),
-							startDate, endDate);
+					.findByQuestionnaireNameContainingAndEndDateLessThanEqualOrderByCreatTimeDesc(
+							req.getSearchQuestionnaireName(), endDate);
 		}
 		// 6.沒有問卷名稱、沒有開始日期、有結束日期
 		if (!checkSearchQname && checkSearchEndDate && !checkSearchStartDate) {
-
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-			LocalDate startDate = LocalDate.parse("0001-01-01", format);
-
-			LocalDate endDate = req.getSearchStartDate();
+			LocalDate endDate = req.getSearchEndDate();
 
 			// 回傳模糊搜尋、時間區間後的資料
-			questionnaireNameInfo = questionnaireNameDao.findByStartDateBetweenOrderByStartDateDesc(startDate, endDate);
+			questionnaireNameInfo = questionnaireNameDao.findByEndDateLessThanEqualOrderByCreatTimeDesc(endDate);
 		}
 
 		// 7.沒有問卷名稱、有開始日期、有結束日期
@@ -521,19 +509,14 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			}
 
 			// 回傳時間區間資料
-			questionnaireNameInfo = questionnaireNameDao.findByStartDateBetweenOrderByStartDateDesc(startDate, endDate);
+			questionnaireNameInfo = questionnaireNameDao.findByStartDateGreaterThanEqualAndEndDateLessThanEqualOrderByCreatTimeDesc(startDate, endDate);
 		}
+		
 		// 8.沒有問卷名稱、沒有結束日期、有開始日期
 		if (!checkSearchQname && checkSearchStartDate && !checkSearchEndDate) {
 			LocalDate startDate = req.getSearchStartDate();
-
-			if (LocalDate.now().isBefore(startDate)) {
-				return new QuestionnaireRes("開始日期不可大於今天");
-			}
-
 			// 回傳時間區間資料
-			questionnaireNameInfo = questionnaireNameDao.findByStartDateBetweenOrderByStartDateDesc(startDate,
-					LocalDate.now());
+			questionnaireNameInfo = questionnaireNameDao.findByStartDateGreaterThanEqualOrderByCreatTimeDesc(startDate);
 		}
 		if (questionnaireNameInfo.isEmpty()) {
 			return new QuestionnaireRes("查無資料");
@@ -544,8 +527,8 @@ public class QuestionnaireImpl implements QuestionnaireService {
 	/*
 	 * =============================================================================
 	 */
-	// 暫留
-	// ----搜尋完問卷標題點進去看到裡面的問題 ps.2022/12/25成功 <暫留>
+	// 
+	// ----搜尋完問卷標題點進去看到裡面的問題 ps.2022/12/25成功
 	// req (問卷uuid)
 	@Override
 	public QuestionnaireRes getTopicAndOptions(QuestionnaireReq req) {
@@ -558,7 +541,13 @@ public class QuestionnaireImpl implements QuestionnaireService {
 		}
 		QuestionnaireName questionnaireName = questionnaireNameOp.get();
 		List<TopicTitle> topicTitleInfo = topicTitleDao.findByQuestionnaireUuid(questionnaireNameUuid);
+		if (topicTitleInfo.isEmpty()) {
+			return new QuestionnaireRes("該問卷沒有題目");
+		}
 		List<Options> questionInfo = optionsDao.findByQuestionnaireUuid(questionnaireNameUuid);
+		if (questionInfo.isEmpty()) {
+			return new QuestionnaireRes("該問卷無任何人做答");
+		}
 		return new QuestionnaireRes(questionnaireName, topicTitleInfo, questionInfo);
 	}
 
@@ -604,7 +593,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 		if (!questionnaireNameOp.isPresent()) {
 			return new QuestionnaireRes("找不到你的問卷，這個防呆訊息其實可以不用");
 		}
-
+		QuestionnaireName questionnaireName = questionnaireNameOp.get();
 		// 預備封裝回去
 		List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList = new ArrayList<>();
 
@@ -629,7 +618,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			// 封裝回去
 			dynamicQuestionnaireVoList.add(dynamicQuestionnaireVo);
 		}
-		return new QuestionnaireRes(dynamicQuestionnaireVoList, "");
+		return new QuestionnaireRes(dynamicQuestionnaireVoList, questionnaireName);
 	}
 
 	/*
@@ -651,9 +640,9 @@ public class QuestionnaireImpl implements QuestionnaireService {
 			return new QuestionnaireRes("請輸入正確性別");
 		}
 
-		if (!req.getEmail().matches("^[A-Za-z0-9]+@gmail.com")) {
-			return new QuestionnaireRes("信箱格式錯誤");
-		}
+//		if (!req.getEmail().matches("^[A-Za-z0-9]+@gmail.com")) {
+//			return new QuestionnaireRes("信箱格式錯誤");
+//		}
 		if (!req.getPhone().matches("[0-9]{4}[0-9]{6}")) {
 			return new QuestionnaireRes("手機格式錯誤 ex:097x03x82x");
 		}
@@ -787,9 +776,15 @@ public class QuestionnaireImpl implements QuestionnaireService {
 	 */
 
 	@Override
-	public QuestionnaireRes getPeopleAndWriteDateInfo() {
+	public QuestionnaireRes getPeopleAndWriteDateInfo(QuestionnaireReq req) {
 		QuestionnaireRes res = new QuestionnaireRes();
-		List<WriteDate> writeDateInfo = writeDateDao.findByOrderByWriteDateTimeDesc();
+		// 請求問卷名稱的UUID
+		UUID questionnaireNameUuid = UUID.fromString(req.getQuestionnaireNameUuid());
+		List<WriteDate> writeDateInfo = writeDateDao
+				.findByQuestionnaireUuidOrderByWriteDateTimeDesc(questionnaireNameUuid);
+		if (writeDateInfo.isEmpty()) {
+			res.setMessage("該問卷無人作答");
+		}
 		res.setWriteListInfo(writeDateInfo);
 		return res;
 	}
@@ -801,7 +796,7 @@ public class QuestionnaireImpl implements QuestionnaireService {
 	public QuestionnaireRes getQuestionnaireFeedback(QuestionnaireReq req) {
 
 		UUID writeDateUuid = UUID.fromString(req.getWriteDateUuid());
-//		UUID peopleid = UUID.fromString(writeDateUuid.);
+
 		WriteDate writeDate = writeDateDao.findById(writeDateUuid).get();
 		People people = peopleDao.findById(writeDate.getPeopleId()).get();
 		QuestionnaireName questionnaireNameInfo = questionnaireNameDao.findById(writeDate.getQuestionnaireUuid()).get();

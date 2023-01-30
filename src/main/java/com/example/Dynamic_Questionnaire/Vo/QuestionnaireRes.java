@@ -16,7 +16,7 @@ public class QuestionnaireRes {
 	private Options question;// 題目
 	private String message; // 訊息
 	private List<QuestionnaireName> questionnaireNameList;// 提供搜尋用
-	private List<TopicTitle> topicTitleInfo;// 提供搜尋用
+	private List<TopicTitle> topicTitleInfoList;// 提供搜尋用
 	private List<Options> optionsInfoList;// 提供搜尋用
 	private List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList;// Vo封裝
 	private WriteDate writeDate;// 填寫日期
@@ -34,7 +34,7 @@ public class QuestionnaireRes {
 		this.people = people;
 		this.writeDate = writeDate;
 		this.questionnaireName = questionnaireName;
-		this.topicTitleInfo = topicTitleInfo;
+		this.topicTitleInfoList = topicTitleInfo;
 		this.optionsInfoList = optionsInfo;
 		this.chooseListForPeople = chooseListForPeople;
 	}
@@ -50,6 +50,10 @@ public class QuestionnaireRes {
 		this.message = message;
 
 	}
+	public QuestionnaireRes(List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList,  QuestionnaireName questionnaireName) {
+		this.dynamicQuestionnaireVoList = dynamicQuestionnaireVoList;
+		this.questionnaireName = questionnaireName;
+	}
 
 	public QuestionnaireRes(List<DynamicQuestionnaireVo> dynamicQuestionnaireVoList, String message) {
 		this.dynamicQuestionnaireVoList = dynamicQuestionnaireVoList;
@@ -59,19 +63,19 @@ public class QuestionnaireRes {
 	public QuestionnaireRes(QuestionnaireName questionnaireName, List<TopicTitle> topicTitleInfo,
 			List<Options> questionInfo) {
 		this.questionnaireName = questionnaireName;
-		this.topicTitleInfo = topicTitleInfo;
+		this.topicTitleInfoList = topicTitleInfo;
 		this.optionsInfoList = questionInfo;
 	}
 
 	public QuestionnaireRes(List<TopicTitle> topicTitleInfo, List<Options> questionInfo) {
-		this.topicTitleInfo = topicTitleInfo;
+		this.topicTitleInfoList = topicTitleInfo;
 		this.optionsInfoList = questionInfo;
 	}
 
 	public QuestionnaireRes(List<QuestionnaireName> questionnaireNameList, List<TopicTitle> topicTitleInfo,
 			List<Options> questionInfo) {
 		this.questionnaireNameList = questionnaireNameList;
-		this.topicTitleInfo = topicTitleInfo;
+		this.topicTitleInfoList = topicTitleInfo;
 		this.optionsInfoList = questionInfo;
 	}
 
@@ -147,12 +151,12 @@ public class QuestionnaireRes {
 		this.questionnaireNameList = questionnaireNameList;
 	}
 
-	public List<TopicTitle> getTopicTitleInfo() {
-		return topicTitleInfo;
+	public List<TopicTitle> getTopicTitleInfoList() {
+		return topicTitleInfoList;
 	}
 
-	public void setTopicTitleInfo(List<TopicTitle> topicTitleInfo) {
-		this.topicTitleInfo = topicTitleInfo;
+	public void setTopicTitleInfoList(List<TopicTitle> topicTitleInfo) {
+		this.topicTitleInfoList = topicTitleInfo;
 	}
 
 	public List<Options> getOptionsInfoList() {

@@ -12,11 +12,11 @@ public interface QuestionnaireService {
 
 	// 搜索問卷列表 req (問卷名稱、開始日期、結束日期) ok!
 	public QuestionnaireRes getQuestionnaireList(QuestionnaireReq req);
-
+	
 	// 封裝回去，以便用戶編輯 req(問卷uuid) ok!
 	public QuestionnaireRes getVoList(QuestionnaireReq req);
 
-	// 搜索問卷標題和選項 req (問卷uuid) ps.打印出整張問卷、問題、選項 ok! <暫留>
+	// 搜索問卷標題和選項 req (問卷uuid) ps.打印出整張問卷、問題、選項 ok!
 	public QuestionnaireRes getTopicAndOptions(QuestionnaireReq req);
 
 	// 刪除問卷 req (問卷uuid) ok!
@@ -28,13 +28,12 @@ public interface QuestionnaireService {
 	// 新增填寫日期、計算選項總數、百分比 req(用戶id、問卷uuid)(List<string> 選項uuid) ok!
 	public QuestionnaireRes creatWriteDateAndCount(QuestionnaireReq req);
 
-	// 自動更新開啟或關閉 req(無)
-//	public void autoUpdateOpenOrClosure();
-
-	// 查看填寫日期，後面查看問卷回饋會用到 req(無)
-	public QuestionnaireRes getPeopleAndWriteDateInfo();
+	// 查看填寫日期，後面查看問卷回饋會用到 req
+	public QuestionnaireRes getPeopleAndWriteDateInfo(QuestionnaireReq req);
 
 	// 查看問卷反饋 req(填寫日期uuid)
 	public QuestionnaireRes getQuestionnaireFeedback(QuestionnaireReq req);
+	
+
 
 }
