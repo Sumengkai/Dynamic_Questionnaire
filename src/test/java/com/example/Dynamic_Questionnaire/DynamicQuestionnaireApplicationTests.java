@@ -196,7 +196,7 @@ class DynamicQuestionnaireApplicationTests {
 	}
 
 	@Test
-	public void sTest() { // 暫時留著
+	public void getTopicAndOptions() { // 暫時留著
 		String uuidStr = "f9ad642c-80ad-42f4-b74f-c119e66725a3";
 		QuestionnaireReq req = new QuestionnaireReq();
 		req.setQuestionnaireNameUuid(uuidStr);
